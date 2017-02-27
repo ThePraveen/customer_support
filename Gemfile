@@ -46,12 +46,11 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'active_model_serializers'
+# gem 'active_model_serializers'
 gem 'rack-cors'
 gem 'rack-attack'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'apipie-rails'
-# gem 'omniauth-github'
-# gem 'omniauth-facebook'
-# gem 'omniauth-google-oauth2'
+# gem "audited"
+# gem "rails-observers", github: 'rails/rails-observers'
