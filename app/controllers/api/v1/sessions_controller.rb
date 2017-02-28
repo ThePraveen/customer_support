@@ -1,6 +1,6 @@
 # see http://www.emilsoman.com/blog/2013/05/18/building-a-tested/
 module Api::V1
-  class SessionsController < DeviseTokenAuth::SessionsController
+  class SessionsController < DeviseTokenAuth::ApplicationController
     before_action :set_user_by_token, :only => [:destroy]
     after_action :reset_session, :only => [:destroy]
 
