@@ -9,6 +9,11 @@ module Api::V1
     end
 
     def create
+
+      unless params[:role].present?
+        render_role_not_passed_error
+        return
+      end
       # Check
       field = (resource_params.keys.map(&:to_sym) & resource_class.authentication_keys).first
 
@@ -29,6 +34,11 @@ module Api::V1
         @resource = resource_class.where(q, q_value).first
       end
 
+      unless @resource.roles_array.include? params[:role]
+        render_create_error_wrong_role
+        return
+      end
+
       if @resource and valid_params?(field, q_value) and @resource.valid_password?(resource_params[:password]) and (!@resource.respond_to?(:active_for_authentication?) or @resource.active_for_authentication?)
         # create client id
         @client_id = SecureRandom.urlsafe_base64(nil, false)
@@ -43,6 +53,12 @@ module Api::V1
         sign_in(:user, @resource, store: false, bypass: false)
 
         yield @resource if block_given?
+
+        if params[:role].present? && @resource.roles_array.include?(params[:role])
+          render_create_success
+        else
+          render_create_error_bad_credentials
+        end
 
         render_create_success
       elsif @resource and not (!@resource.respond_to?(:active_for_authentication?) or @resource.active_for_authentication?)
@@ -124,6 +140,18 @@ module Api::V1
         errors: [I18n.t("devise_token_auth.sessions.bad_credentials")]
       }, status: 401
     end
+
+    def render_create_error_wrong_role
+      render json: {
+          errors: ["Not authorised to login as this role"]
+      }, status: 401
+    end
+
+      def render_role_not_passed_error
+        render json: {
+            errors: ["Role not passed"]
+        }, status: 400
+      end
 
     def render_destroy_success
       render json: {
