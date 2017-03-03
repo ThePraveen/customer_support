@@ -2,21 +2,6 @@ module Api::V1
   class IssuesController < ApplicationController
     include IssueHelper
 
-    # GET /issues
-    def index
-      issues = search_issues(params)
-      render json: {
-          status: "success",
-          message: "Issues found",
-          data: { issues: issues}
-      }, status: :ok and return
-    end
-
-    # GET /issues/1
-    def show
-      render json: @issue
-    end
-
     # POST /issues
     def create
       logger.info "Create issue called with params: #{params.inspect}"
@@ -42,6 +27,34 @@ module Api::V1
     def update
       issue = Issue.find(params[:id])
       issue = update_issue(issue, params)
+      render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return
+    rescue Exception => e
+      logger.error(e.message)
+      logger.error(e.backtrace.join("\n"))
+      render json: {status: "failure", message: e.message}, status: :bad_request
+    end
+
+
+
+    # GET /issues
+    def index
+      issues = search_issues(params)
+      render json: {
+          status: "success",
+          message: "Issues found",
+          data: { issues: issues}
+      }, status: :ok and return
+    end
+
+    # GET /issues/1
+    def show
+      issue = Issue.find(params[:id])
+      render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return
+    end
+
+    def add_comment
+      issue = Issue.find(params[:id])
+      issue = add_comment_to_issue(issue, params)
       render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return
     rescue Exception => e
       logger.error(e.message)

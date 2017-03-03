@@ -2,6 +2,9 @@ class Issue < ApplicationRecord
   belongs_to :customer
   # belongs_to :executive
   # belongs_to :issue_type
+
+  has_many :comments
+
   CREATE_KEYS = [:title, :customer_id, :description]
   UPDATE_KEYS = [:title, :description, :status, :executive_id]
 

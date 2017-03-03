@@ -1,4 +1,22 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      get 'comments/create'
+    end
+  end
+
+  namespace :api do
+    namespace :v1 do
+      get 'comments/index'
+    end
+  end
+
+  namespace :api do
+    namespace :v1 do
+      get 'comments/show'
+    end
+  end
+
   apipie
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   scope module: 'api' do
@@ -13,6 +31,8 @@ Rails.application.routes.draw do
       }
 
       resources :users
+      put "/issues/:id/add_comment", to: "users_controller#add_comment"
+
       resources :issues
       resources :issue_types
     end

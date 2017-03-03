@@ -26,4 +26,13 @@ module IssueHelper
     Issue.find(id)
   end
 
+  def add_comment_to_issue(issue, comment_params)
+    issue = Issue.find(issue) if issue.class != Issue
+    issue.comments.create!(extract_params(comment_params, Comment::CREATE_KEYS))
+  rescue Exception => e
+    logger.error(e.message)
+    logger.error(e.backtrace.join("\n"))
+    nil
+  end
+
 end
