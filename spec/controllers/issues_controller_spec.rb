@@ -17,8 +17,7 @@ require 'rails_helper'
 # is no simpler way to get a handle on the object needed for the example.
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
-
-RSpec.describe IssuesController, type: :controller do
+RSpec.describe Api::V1::IssuesController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Issue. As you add validations to Issue, be sure to
