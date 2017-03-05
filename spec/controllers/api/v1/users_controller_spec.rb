@@ -11,9 +11,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
   describe "GET #show" do
     it "returns http success" do
-      get :show
+      get :show, {id: User.first}
       expect(response).to have_http_status(:success)
     end
-  end
 
+    it "returns http failure" do
+      get :show, {id: Time.now.to_i}
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

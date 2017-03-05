@@ -1,10 +1,9 @@
 FactoryGirl.define do
   factory :issue do
-    customer nil
-    executive nil
-    issue_type nil
-    status "MyString"
-    title "MyText"
-    description "MyText"
+    customer_id 1
+    executive_id nil
+    status "created"
+    title "Not able to start"
+    description "It's very complicated"
   end
 end

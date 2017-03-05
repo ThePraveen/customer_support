@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   end
 
   def add_roles(new_roles_to_be_added, params={})
-    new_roles_to_be_added.each { |role_to_added|
+    new_roles_to_be_added.each do |role_to_added|
       unless self.roles_array.include? role_to_added
         new_role = Role.find_by_name(role_to_added)
         if new_role.present?
@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
           end
         end
       end
-    }
+    end
   end
 
   def role_data(role)
