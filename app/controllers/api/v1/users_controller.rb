@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
     render json: {
         status: "success",
         message: "Users found",
-        data: { users: users}
+        data: { users: users.as_json(:methods => [:roles_array])}
     }, status: :ok and return
   end
 
