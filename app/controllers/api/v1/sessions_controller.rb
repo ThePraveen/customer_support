@@ -60,7 +60,7 @@ module Api::V1
           render_create_error_bad_credentials
         end
 
-        render_create_success
+        # render_create_success
       elsif @resource and not (!@resource.respond_to?(:active_for_authentication?) or @resource.active_for_authentication?)
         render_create_error_not_confirmed
       else

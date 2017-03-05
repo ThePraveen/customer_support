@@ -13,12 +13,6 @@ Role.create!(:name => :admin)
 new_admin = User.create!(:email => "admin@awign.com", :password => "11111111", :name => "Admin User")
 new_admin.add_roles(['admin'])
 
-
-IssueType.create!(:name => "Complaint")
-IssueType.create!(:name => "Enquiry")
-IssueType.create!(:name => "Contact")
-IssueType.create!(:name => "Warning")
-
 Permission.create(:name => "CAN_UPDATE_USER")
 Permission.create(:name => "CAN_DELETE_USER")
 Permission.create(:name => "CAN_UPDATE_CUSTOMER")
