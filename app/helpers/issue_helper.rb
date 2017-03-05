@@ -10,7 +10,8 @@ module IssueHelper
 
   def update_issue(issue, update_params)
     issue = Issue.find(issue) if issue.class != Issue
-    issue.update(update_params)
+    issue.update(extract_params(update_params, [:status, :executive_id]))
+    issue
   rescue Exception => e
     logger.error(e.message)
     logger.error(e.backtrace.join("\n"))
@@ -19,6 +20,8 @@ module IssueHelper
 
   def search_issues(search_params)
     conditions  = extract_params(search_params, [:customer_id, :executive_id])
+    conditions[:customer_id]  = conditions[:customer_id].to_i
+    conditions[:executive_id]  = conditions[:executive_id].to_i
     Issue.where(conditions)
   end
 
