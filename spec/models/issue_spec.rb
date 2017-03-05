@@ -12,10 +12,9 @@ RSpec.describe Issue, type: :model do
       @customer = FactoryGirl.create(:customer, user_id: @user.id)
     end
 
-    it "Check if issues creation throws validation error when title and description are blank" do
+    it "Check if issues creation throws validation error when title, customer and description are blank" do
       @issue = Issue.create
-      puts @issue.errors.messages
-      #@issue = Issue.create(customer_id: @customer.id)
+      expect(@issue.errors.messages[:customer]).to eq ["must exist"]
       expect(@issue.errors.messages[:title]).to eq ["can't be blank"]
       expect(@issue.errors.messages[:description]).to eq ["can't be blank"]
     end
@@ -35,6 +34,7 @@ RSpec.describe Issue, type: :model do
       expect(@issue.title).to eq "Not able to start"
       expect(@issue.description).to eq "It's very complicated"
       expect(@issue.status).to eq "created"
+      expect(@issue.customer_id).to eq @customer.id
     end
   end
 end
