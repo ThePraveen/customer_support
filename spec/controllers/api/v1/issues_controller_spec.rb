@@ -19,26 +19,34 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 RSpec.describe Api::V1::IssuesController, type: :controller do
 
+    let(:user) do
+      FactoryGirl.create :user
+    end
+
+    before do
+      @user = User.first
+      @customer = FactoryGirl.create(:customer, user_id: @user.id)
+    end
+
   # This should return the minimal set of attributes required to create a valid
   # Issue. As you add validations to Issue, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {"customer_id": @customer.id, "title": "Issue in creating", "description": "It should have been simpler"}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {"title": "Issue in creating", "description": "It should have been simpler"}
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # IssuesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
-
   describe "GET #index" do
     it "assigns all issues as @issues" do
       issue = Issue.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, params: {customer_id: issue.customer_id}, session: valid_session
       expect(assigns(:issues)).to eq([issue])
     end
   end
@@ -46,22 +54,7 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested issue as @issue" do
       issue = Issue.create! valid_attributes
-      get :show, params: {id: issue.to_param}, session: valid_session
-      expect(assigns(:issue)).to eq(issue)
-    end
-  end
-
-  describe "GET #new" do
-    it "assigns a new issue as @issue" do
-      get :new, params: {}, session: valid_session
-      expect(assigns(:issue)).to be_a_new(Issue)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested issue as @issue" do
-      issue = Issue.create! valid_attributes
-      get :edit, params: {id: issue.to_param}, session: valid_session
+      get :show, params: {id: issue.id}, session: valid_session
       expect(assigns(:issue)).to eq(issue)
     end
   end
@@ -70,31 +63,26 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     context "with valid params" do
       it "creates a new Issue" do
         expect {
-          post :create, params: {issue: valid_attributes}, session: valid_session
+          post :create, params: valid_attributes, session: valid_session
         }.to change(Issue, :count).by(1)
       end
 
       it "assigns a newly created issue as @issue" do
-        post :create, params: {issue: valid_attributes}, session: valid_session
+        post :create, params: valid_attributes, session: valid_session
         expect(assigns(:issue)).to be_a(Issue)
         expect(assigns(:issue)).to be_persisted
-      end
-
-      it "redirects to the created issue" do
-        post :create, params: {issue: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Issue.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved issue as @issue" do
-        post :create, params: {issue: invalid_attributes}, session: valid_session
-        expect(assigns(:issue)).to be_a_new(Issue)
+        post :create, params: invalid_attributes, session: valid_session
+        expect(assigns(:issue)).to be_nil
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {issue: invalid_attributes}, session: valid_session
-        expect(response).to render_template("new")
+        post :create, params: invalid_attributes, session: valid_session
+        expect(response.status).to be 400
       end
     end
   end
@@ -102,26 +90,21 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {status: "assigned", executive_id: 1}
       }
 
       it "updates the requested issue" do
         issue = Issue.create! valid_attributes
-        put :update, params: {id: issue.to_param, issue: new_attributes}, session: valid_session
+        put :update, params: new_attributes.merge({id: issue.to_param}), session: valid_session
         issue.reload
-        skip("Add assertions for updated state")
+        expect(issue.status).to eq "assigned"
+        expect(issue.executive_id).to eq 1
       end
 
       it "assigns the requested issue as @issue" do
         issue = Issue.create! valid_attributes
         put :update, params: {id: issue.to_param, issue: valid_attributes}, session: valid_session
         expect(assigns(:issue)).to eq(issue)
-      end
-
-      it "redirects to the issue" do
-        issue = Issue.create! valid_attributes
-        put :update, params: {id: issue.to_param, issue: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(issue)
       end
     end
 
@@ -131,28 +114,6 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         put :update, params: {id: issue.to_param, issue: invalid_attributes}, session: valid_session
         expect(assigns(:issue)).to eq(issue)
       end
-
-      it "re-renders the 'edit' template" do
-        issue = Issue.create! valid_attributes
-        put :update, params: {id: issue.to_param, issue: invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
-      end
     end
   end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested issue" do
-      issue = Issue.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: issue.to_param}, session: valid_session
-      }.to change(Issue, :count).by(-1)
-    end
-
-    it "redirects to the issues list" do
-      issue = Issue.create! valid_attributes
-      delete :destroy, params: {id: issue.to_param}, session: valid_session
-      expect(response).to redirect_to(issues_url)
-    end
-  end
-
 end

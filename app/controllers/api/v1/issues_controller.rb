@@ -5,17 +5,17 @@ module Api::V1
     # POST /issues
     def create
       logger.info "Create issue called with params: #{params.inspect}"
-      issue = create_issue(params)
-      if issue.present?
+      @issue = create_issue(params)
+      if @issue.present?
         render json: {
             status: "success",
             message: "Issue Created Successfully",
             data: {
-                :issue => issue
+                :issue => @issue
             }
         }, status: :created and return
       else
-        render json: {status: "error", message: e.message}, status: :bad_request and return
+        render json: {status: "error", message: "Issue with request format"}, status: :bad_request and return
       end
     rescue Exception => e
       logger.error(e.message)
@@ -25,9 +25,9 @@ module Api::V1
 
     # PATCH/PUT /issues/1
     def update
-      issue = Issue.find(params[:id])
-      issue = update_issue(issue, params)
-      render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return
+      @issue = Issue.find(params[:id])
+      @issue = update_issue(@issue, params)
+      render json: {status: "success",  message: "Issue Updated Successfully", data: @issue}, status: :ok and return
     rescue Exception => e
       logger.error(e.message)
       logger.error(e.backtrace.join("\n"))
@@ -38,18 +38,18 @@ module Api::V1
 
     # GET /issues
     def index
-      issues = search_issues(params)
+      @issues = search_issues(params)
       render json: {
           status: "success",
           message: "Issues found",
-          data: { issues: issues}
+          data: { issues: @issues}
       }, status: :ok and return
     end
 
     # GET /issues/1
     def show
-      issue = Issue.find(params[:id])
-      render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return
+      @issue = Issue.find(params[:id])
+      render json: {status: "success",  message: "Issue Updated Successfully", data: @issue}, status: :ok and return
     end
 
     def add_comment
