@@ -38,4 +38,16 @@ class User < ActiveRecord::Base
     }
   end
 
+  def role_data(role)
+    case role
+      when "customer"
+        self.customer.as_json(:only => [:id])
+      when "admin"
+        self.admin.as_json(:only => [:id])
+      when "executive"
+        self.executive.as_json(:only => [:id])
+      else
+        {}
+    end
+  end
 end

@@ -3,6 +3,43 @@ module Api::V1
     include IssueHelper
 
     # POST /issues
+    api :POST, 'api/issues', "Create a new issue"
+    description "Customer uses this controller to create new issue"
+
+    param :customer_id, Integer, :desc => "Payload Param: is of the customer creatung this issue", :required => true
+    param :title, String, :desc => "Payload Param: subject of the issue", :required => true
+    param :description, String, :desc => "Payload Param: Description of the issue", :required => true
+
+    example '
+
+          ------- SAMPLE REQUEST and RESPONSES --------
+
+          1. success: 201
+          REQUEST
+          {
+            "customer_id": 1,
+            "title": "some title",
+            "description": "Some big description"
+          }
+          RESPONSE
+          {
+            "status": "success",
+            "message": "Issue Created Successfully",
+            "data": {
+              "issue": {
+                "id": 14,
+                "customer_id": 1,
+                "executive_id": null,
+                "status": "created",
+                "title": "some title",
+                "description": "Some big description",
+                "created_at": "2017-03-05T09:09:44.000Z",
+                "updated_at": "2017-03-05T09:09:44.000Z"
+              }
+            }
+          }
+          '
+
     def create
       logger.info "Create issue called with params: #{params.inspect}"
       issue = create_issue(params)
@@ -23,7 +60,40 @@ module Api::V1
       render json: {status: "error", message: e.message}, status: :internal_server_error
     end
 
-    # PATCH/PUT /issues/1
+    api :PUT, 'api/issues/:id', "Update any issue."
+    description "Update an issue with id passed. Used to assign executive and change the status"
+
+    param :executive_id, Integer, :desc => "Payload Param: executive id to assign to", :required => false
+    param :status, String, :desc => "Payload Param: status", :required => false
+
+    example '
+
+          ------- SAMPLE REQUEST and RESPONSES --------
+
+          1. success: 201
+          REQUEST
+          {
+            "status": "resolved",
+            "executive_id": 2,
+          }
+          RESPONSE
+          {
+            "status": "success",
+            "message": "Issue Updated Successfully",
+            "data": {
+              "issue": {
+                "id": 14,
+                "customer_id": 1,
+                "executive_id": 2,
+                "status": "resolved",
+                "title": "some title",
+                "description": "Some big description",
+                "created_at": "2017-03-05T09:09:44.000Z",
+                "updated_at": "2017-03-05T09:09:44.000Z"
+              }
+            }
+          }
+          '
     def update
       issue = Issue.find(params[:id])
       issue = update_issue(issue, params)
@@ -36,7 +106,13 @@ module Api::V1
 
 
 
-    # GET /issues
+    api :GET, 'api/issues', "Search for issues"
+    description "Search for issues with status, customer_id and other filter"
+
+    param :executive_id, Integer, :desc => "Query Param: executive id ", :required => false
+    param :customer_id, Integer, :desc => "Query Param: customer id ", :required => false
+    param :status, String, :desc => "Payload Param: status", :required => false
+
     def index
       issues = search_issues(params)
       render json: {
@@ -46,7 +122,11 @@ module Api::V1
       }, status: :ok and return
     end
 
-    # GET /issues/1
+    api :GET, 'api/issues/:id', "GET an issue with id"
+    description "Find the issue with id passed in path param"
+
+    param :id, String, :desc => "Payload Param: id of the issue", :required => false
+
     def show
       issue = Issue.find(params[:id])
       render json: {status: "success",  message: "Issue Updated Successfully", data: issue}, status: :ok and return

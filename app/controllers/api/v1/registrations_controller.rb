@@ -6,8 +6,13 @@ module Api::V1
     skip_after_action :update_auth_header, :only => [:create, :destroy]
 
 
-    api :POST, 'auth'
-    description '{ "name" : "Hello World", "email" : "xyz@acbc.com", "password" : "12345678" }'
+    api :POST, 'auth', "Sign Up"
+    description 'API to signup as a customer'
+    param :email, String, :desc => "Payload Param : email", :required => true
+    param :password, String, :desc => "Payload Param : password", :required => true
+    param :roles, String, :desc => "Payload Param : roles the user want to be created", :required => true
+
+
     def create
       @resource            = resource_class.new(sign_up_params)
       @resource.provider   = "email"

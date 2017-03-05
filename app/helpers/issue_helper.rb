@@ -18,7 +18,7 @@ module IssueHelper
   end
 
   def search_issues(search_params)
-    conditions  = extract_params(search_params, [:customer_id])
+    conditions  = extract_params(search_params, [:customer_id, :executive_id])
     Issue.where(conditions)
   end
 

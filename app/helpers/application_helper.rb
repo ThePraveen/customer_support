@@ -28,4 +28,14 @@ module ApplicationHelper
   rescue Exception => e
   end
 
+
+  def role_level_data(user, roles = [])
+    data = {}
+    (roles.presence || user.roles_array).each do |role|
+      data[role] = user.role_data(role)
+    end
+    data
+  end
+
+
 end

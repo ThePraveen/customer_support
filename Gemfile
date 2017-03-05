@@ -52,5 +52,3 @@ gem 'rack-attack'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'apipie-rails'
-# gem "audited"
-# gem "rails-observers", github: 'rails/rails-observers'

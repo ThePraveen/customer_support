@@ -8,6 +8,45 @@ module Api::V1
       render_new_error
     end
 
+
+    api :POST, 'api/auth/sign_in', "Sign In"
+    description "Sign in using email. Need to pass role with which you wish to login"
+
+    param :email, String, :desc => "Payload Param : email", :required => true
+    param :password, String, :desc => "Payload Param : password", :required => true
+    param :role, String, :desc => "Payload Param : role with which you user want to login", :required => true
+
+    example '
+
+          ------- SAMPLE REQUEST and RESPONSES --------
+
+          1. success: 201
+          REQUEST
+          {
+            "email": "thepraveen0207@gmail.com",
+            "password": "11111111",
+            "role": "customer"
+          }
+          RESPONSE
+          {
+            "data": {
+              "id": 2,
+              "email": "thepraveen0207@gmail.com",
+              "provider": "email",
+              "uid": "thepraveen0207@gmail.com",
+              "name": "Praveen Sah",
+              "nickname": null,
+              "image": "https://lh5.googleusercontent.com/-WRezx-wsjTk/AAAAAAAAAAI/AAAAAAAAEio/5HNv3juLszM/photo.jpg?sz=250",
+              "roles": [
+                "customer"
+              ],
+              "logged_in_as": "customer",
+              "customer": {
+                "id": 1
+              }
+            }
+          }
+          '
     def create
 
       unless params[:role].present?
@@ -124,7 +163,7 @@ module Api::V1
 
     def render_create_success
       render json: {
-        data: resource_data(resource_json: @resource.token_validation_response)
+        data: resource_data(resource_json: @resource.token_validation_response.merge(:roles => @resource.roles.map{ |n| n.name }, :logged_in_as => params[:role]).merge(role_level_data(@resource)))
       }
     end
 
