@@ -3,6 +3,8 @@ class Issue < ApplicationRecord
 
   has_many :comments
 
+  validates :title, :description , presence: true
+
   CREATE_KEYS = [:customer_id, :title, :description]
   UPDATE_KEYS = [:status, :executive_id]
 
