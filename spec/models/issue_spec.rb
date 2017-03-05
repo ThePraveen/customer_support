@@ -13,7 +13,9 @@ RSpec.describe Issue, type: :model do
     end
 
     it "Check if issues creation throws validation error when title and description are blank" do
-      @issue = Issue.create(customer_id: @customer.id)
+      @issue = Issue.create
+      puts @issue.errors.messages
+      #@issue = Issue.create(customer_id: @customer.id)
       expect(@issue.errors.messages[:title]).to eq ["can't be blank"]
       expect(@issue.errors.messages[:description]).to eq ["can't be blank"]
     end
