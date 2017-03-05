@@ -13,24 +13,24 @@ RSpec.describe Comment, type: :model do
       @issue = Issue.create(customer_id: @customer.id, title: "Not able to start", description: "It's very complicated")
     end
 
-    it "Check if comment creation throws validation error when user, issue and body are blank" do
+    it "Checks if comment creation throws validation error when user, issue and body are blank" do
       @comment = Comment.create
       expect(@comment.errors.messages[:issue]).to eq ["must exist"]
       expect(@comment.errors.messages[:user_id]).to eq ["can't be blank"]
       expect(@comment.errors.messages[:body]).to eq ["can't be blank"]
     end
 
-    it "Check if comments creation throws validation error when body is blank" do
+    it "Checks if comments creation throws validation error when body is blank" do
       @comment = Comment.create(issue_id: @issue.id, user_id: @user.id)
       expect(@comment.errors.messages[:body]).to eq ["can't be blank"]
     end
 
-    it "Check if comments creation throws validation error when user is blank" do
+    it "Checks if comments creation throws validation error when user is blank" do
       @comment = Comment.create(issue_id: @issue.id, body: "It's very complicated")
       expect(@comment.errors.messages[:user_id]).to eq ["can't be blank"]
     end
 
-    it "Check if comments are getting created with correct values and correct status got assigned" do
+    it "Checks if comments are getting created with correct values and correct status got assigned" do
       @comment = Comment.create(issue_id: @issue.id, user_id: @user.id, body: "It's very complicated")
       expect(@comment.user_id).to eq @user.id
       expect(@comment.body).to eq "It's very complicated"
