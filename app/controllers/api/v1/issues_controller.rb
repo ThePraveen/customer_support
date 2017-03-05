@@ -6,9 +6,9 @@ module Api::V1
     api :POST, 'api/issues', "Create a new issue"
     description "Customer uses this controller to create new issue"
 
-    param :customer_id, String, :desc => "Payload Param: is of the customer creatung this issue", :required => true
-    param :title, String, :desc => "Payload Param: subject of the issue", :required => true
-    param :description, String, :desc => "Payload Param: Description of the issue", :required => true
+    param :customer_id, String, :desc => "Payload Param: is of the customer creatung this issue"
+    param :title, String, :desc => "Payload Param: subject of the issue"
+    param :description, String, :desc => "Payload Param: Description of the issue"
 
     example '
 
@@ -63,8 +63,8 @@ module Api::V1
     api :PUT, 'api/issues/:id', "Update any issue."
     description "Update an issue with id passed. Used to assign executive and change the status"
 
-    param :executive_id, String, :desc => "Payload Param: executive id to assign to", :required => false
-    param :status, String, :desc => "Payload Param: status", :required => false
+    param :executive_id, String, :desc => "Payload Param: executive id to assign to"
+    param :status, String, :desc => "Payload Param: status"
 
     example '
 
@@ -109,9 +109,9 @@ module Api::V1
     api :GET, 'api/issues', "Search for issues"
     description "Search for issues with status, customer_id and other filter"
 
-    param :executive_id, String, :desc => "Query Param: executive id ", :required => false
-    param :customer_id, String, :desc => "Query Param: customer id ", :required => false
-    param :status, String, :desc => "Payload Param: status", :required => false
+    param :executive_id, String, :desc => "Query Param: executive id "
+    param :customer_id, String, :desc => "Query Param: customer id "
+    param :status, String, :desc => "Payload Param: status"
 
     def index
       @issues = search_issues(params)
@@ -125,7 +125,7 @@ module Api::V1
     api :GET, 'api/issues/:id', "GET an issue with id"
     description "Find the issue with id passed in path param"
 
-    param :id, String, :desc => "Payload Param: id of the issue", :required => false
+    param :id, String, :desc => "Payload Param: id of the issue"
 
     def show
       @issue = Issue.find(params[:id])
