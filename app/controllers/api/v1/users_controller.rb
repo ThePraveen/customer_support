@@ -18,5 +18,9 @@ class Api::V1::UsersController < ApplicationController
                   message: "User found",
                   data: { users: user}
                  }, status: :ok and return
+  rescue ActiveRecord::RecordNotFound => e
+    logger.error(e.message)
+    logger.error(e.backtrace.join("\n"))
+    render json: {status: "error", message: e.message}, status: :not_found
   end
 end
