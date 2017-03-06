@@ -27,3 +27,11 @@ Steps to setup
 
     rails s
     
+* To run test cases
+    rsec
+    
+* Documentation
+  https://docs.google.com/document/d/1wRnY66468g83Na5LvAjDizmYlB9qk7w1z4Gvrweutx4/edit#
+    
+* API Documentation
+  visit http://localhost:3000/apipie after starting the server
