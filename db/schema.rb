@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303113051) do
+ActiveRecord::Schema.define(version: 20170303112456) do
 
   create_table "admins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -43,12 +43,6 @@ ActiveRecord::Schema.define(version: 20170303113051) do
     t.index ["user_id"], name: "index_executives_on_user_id", using: :btree
   end
 
-  create_table "issue_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "issues", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "customer_id"
     t.integer  "executive_id"
@@ -61,31 +55,6 @@ ActiveRecord::Schema.define(version: 20170303113051) do
     t.index ["customer_id"], name: "index_issues_on_customer_id", using: :btree
     t.index ["executive_id"], name: "index_issues_on_executive_id", using: :btree
     t.index ["issue_type_id"], name: "index_issues_on_issue_type_id", using: :btree
-  end
-
-  create_table "permissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "replies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "user_id"
-    t.integer  "comment_id"
-    t.text     "body",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.index ["comment_id"], name: "index_replies_on_comment_id", using: :btree
-    t.index ["user_id"], name: "index_replies_on_user_id", using: :btree
-  end
-
-  create_table "role_permissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "role_id"
-    t.integer  "permission_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["permission_id"], name: "index_role_permissions_on_permission_id", using: :btree
-    t.index ["role_id"], name: "index_role_permissions_on_role_id", using: :btree
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -136,12 +105,6 @@ ActiveRecord::Schema.define(version: 20170303113051) do
   add_foreign_key "comments", "users"
   add_foreign_key "customers", "users"
   add_foreign_key "executives", "users"
-  add_foreign_key "issues", "customers"
-  add_foreign_key "issues", "issue_types"
-  add_foreign_key "replies", "comments"
-  add_foreign_key "replies", "users"
-  add_foreign_key "role_permissions", "permissions"
-  add_foreign_key "role_permissions", "roles"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
 end
